@@ -60,6 +60,8 @@ fn float_to_uint(x: f32, x_min: f32, x_max: f32, bits: u32) -> u32 {
     (((x - x_min) * ((1u32 << bits) as f32 / span)) as u32).min((1u32 << bits) - 1)
 }
 
+// Used by `unpack_reply`, which itself is only called from the Linux-only CAN receive path.
+#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
 fn uint_to_float(x_int: u32, x_min: f32, x_max: f32, bits: u32) -> f32 {
     let span = x_max - x_min;
     (x_int as f32) * span / (((1u32 << bits) - 1) as f32) + x_min
@@ -96,6 +98,8 @@ pub struct MitFeedback {
 }
 
 /// Parses the 8-byte feedback frame the driver sends back in MIT mode.
+/// Only called from the Linux-only CAN receive path (`can_worker::linux`).
+#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
 pub fn unpack_reply(limits: &MotorLimits, data: &[u8; 8]) -> MitFeedback {
     let driver_id = data[0];
     let p_int = ((data[1] as u32) << 8) | data[2] as u32;

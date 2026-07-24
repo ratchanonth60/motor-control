@@ -78,13 +78,18 @@ pub struct ServoCanValues {
     pub fault_code: u8,
 }
 
+// `UPLOAD_FUNCTION_ID`, `function_id`, and `parse_upload` are only used from the
+// Linux-only CAN receive path (`can_worker::linux`).
+#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
 pub const UPLOAD_FUNCTION_ID: u32 = 0x29;
 
 /// Extracts the function id (top byte) from an extended servo-mode CAN identifier.
+#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
 pub fn function_id(ext_id: u32) -> u32 {
     ext_id >> 8
 }
 
+#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
 pub fn parse_upload(data: &[u8]) -> Option<ServoCanValues> {
     if data.len() != 8 {
         return None;
