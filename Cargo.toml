@@ -1,0 +1,11 @@
+[package]
+name = "project-control-motor"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = "1.0.104"
+eframe = { version = "0.35.0", default-features = false, features = ["glow", "default_fonts", "wayland", "x11"] }
+egui = "0.35.0"
+serialport = { version = "4.9.0", default-features = false }
+socketcan = "3.6.2"
